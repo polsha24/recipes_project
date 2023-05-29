@@ -14,14 +14,14 @@ txt.grid(column=0, row=1)
 
 
 def clicked():
-    ingredients = txt.get()
+    ingred = txt.get()
     window2 = Tk()
     window2.title("РЕЦЕПТ(Ы)")
     window2.geometry('1000x1000')
     window2['bg'] = 'antiquewhite'
     txt2 = scrolledtext.ScrolledText(window2, width=60, height=30)
     txt2.grid(column=1, row=3)
-    txt2.insert(INSERT, ingredients)
+    txt2.insert(INSERT, ingred)
 
 
 btn = Button(window, text='Найти рецепт!', command=clicked, font=('Courier New', 15), fg='indianred', bg='blanchedalmond')
