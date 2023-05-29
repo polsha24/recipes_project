@@ -11,10 +11,10 @@ lbl = Label(window, text="Введите ингредиенты: ", font=('Couri
 lbl.grid(column=0, row=0)
 txt = Entry(window, width=90)
 txt.grid(column=0, row=1)
+ingred = txt.get()
 
 
 def clicked():
-    ingred = txt.get()
     window2 = Tk()
     window2.title("РЕЦЕПТ(Ы)")
     window2.geometry('1000x1000')
