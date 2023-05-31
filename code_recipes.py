@@ -75,6 +75,7 @@ def get_data(url):
         if iteration_count == 0:
             print("The end of data collection")
         time.sleep(random.randrange(2, 4))
+
     with open("data/projects_data.json", "a", encoding="UTF-8") as file:
         json.dump(project_data_dict, file, indent=4, ensure_ascii=False)
 
