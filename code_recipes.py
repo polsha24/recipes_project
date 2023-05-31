@@ -13,9 +13,9 @@ def get_data(url):
     headers = {
         "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/113.0"
     }
-    project_data_dict = {}
+    recipe_data_dict = {}
     iteration_count = 12
-    print(f"Interations = #{iteration_count}")
+    print(f"Interactions = #{iteration_count}")
 
     for item in range(1, 13):
         req = requests.get(url + f"page/{item}", headers)
@@ -36,48 +36,48 @@ def get_data(url):
         soup = BeautifulSoup(src, "lxml")
         recipes = soup.find_all("div", class_="col-sm-6 col-md-4 recipe-col mb-3")
 
-        project_urls = []
+        recipe_urls = []
         for recipe in recipes:
-            project_url = recipe.find("div", class_="card recipe-card w-100 h-100 mobile-shadow").find("a").get("href")
-            project_urls.append(project_url)
+            recipe_url = recipe.find("div", class_="card recipe-card w-100 h-100 mobile-shadow").find("a").get("href")
+            recipe_urls.append(recipe_url)
 
-        for project_url in project_urls:
-            req = requests.get(project_url, headers)
-            project_name = project_url.split("/")[-2]
+        for recipe_url in recipe_urls:
+            req = requests.get(recipe_url, headers)
+            recipe_name = recipe_url.split("/")[-2]
 
-            with open(f"{folder_name}/{project_name}.html", "w", encoding="UTF-8") as file:
+            with open(f"{folder_name}/{recipe_name}.html", "w", encoding="UTF-8") as file:
                 file.write(req.text)
 
-            with open(f"{folder_name}/{project_name}.html", encoding="UTF-8") as file:
+            with open(f"{folder_name}/{recipe_name}.html", encoding="UTF-8") as file:
                 src = file.read()
 
             soup = BeautifulSoup(src, "lxml")
-            project_data = soup.find("article", class_="recipe-page py-2")
+            recipe_data = soup.find("article", class_="recipe-page py-2")
 
             try:
-                project_title = project_data.find("div", class_="col-md-8 pr-md-2").find("h1").text
+                recipe_title = recipe_data.find("div", class_="col-md-8 pr-md-2").find("h1").text
             except Exception:
-                project_title = "No recipe title"
+                recipe_title = "No recipe title"
 
             try:
-                ingredients = project_data.find_all("div", class_="col-md-4 col-sm-6")
-                project_ingredients = []
+                ingredients = recipe_data.find_all("div", class_="col-md-4 col-sm-6")
+                recipe_ingredients = []
                 for ingredient in ingredients:
                     temp_ingr = ingredient.find("a").get("title")
-                    project_ingredients.append(temp_ingr)
+                    recipe_ingredients.append(temp_ingr)
             except Exception:
-                project_ingredients = ["No ingredients in recipe"]
+                recipe_ingredients = ["No ingredients in recipe"]
 
-            project_data_dict.update({project_title: project_ingredients})
+            recipe_data_dict.update({recipe_title: recipe_ingredients})
 
         iteration_count -= 1
-        print(f"Interation #{item} completed, #{iteration_count} iterations left")
+        print(f"Interaction #{item} completed, #{iteration_count} iterations left")
         if iteration_count == 0:
             print("The end of data collection")
         time.sleep(random.randrange(2, 4))
 
-    with open("data/projects_data.json", "a", encoding="UTF-8") as file:
-        json.dump(project_data_dict, file, indent=4, ensure_ascii=False)
+    with open("data/recipes_data.json", "a", encoding="UTF-8") as file:
+        json.dump(recipe_data_dict, file, indent=4, ensure_ascii=False)
 
 
 def clicked():
@@ -88,7 +88,8 @@ def clicked():
     window2['bg'] = 'antiquewhite'
     txt2 = scrolledtext.ScrolledText(window2, width=90, height=40)
     txt2.grid(column=0, row=2)
-    btn3 = Button(window2, text=f'У вас есть {", ".join(user_input)}\nВы можете приготовить:',font=('TkHeadingFont', 15), fg='indianred', bg='antiquewhite', highlightthickness=0)
+    btn3 = Button(window2, text=f'У вас есть {", ".join(user_input)}\nВы можете приготовить:',
+                  font=('TkHeadingFont', 15), fg='indianred', bg='antiquewhite', highlightthickness=0)
     btn3.grid(column=0, row=1)
     item = 1
     for k, v in all_recipes.items():
@@ -103,6 +104,7 @@ def clicked():
 # get_data('https://art-lunch.ru/all-recipes/')
 # строка незакоментирована, когда в первый раз запускаем код, он собирает данные и сохраняет в файл
 # при последующем использовании - строка комментируется, парсинг снова выполнять не нужно
+
 with open("data/projects_data.json", "r", encoding="UTF-8") as file:
     all_recipes = json.load(file)
 builders = "Грибанова Диана\nПереяславцева Ирина\nСавина Арина\nТокунова Полина"
