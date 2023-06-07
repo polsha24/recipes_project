@@ -3,6 +3,7 @@ import os
 import random
 import time
 import requests
+import webbrowser
 import tkinter
 from tkinter import *
 from tkinter import scrolledtext
@@ -89,7 +90,8 @@ def clicked():
     txt2 = scrolledtext.ScrolledText(window2, width=90, height=40)
     txt2.grid(column=0, row=2)
     btn3 = Button(window2, text=f'У вас есть {", ".join(user_input)}\nВы можете приготовить:',
-                  font=('TkHeadingFont', 15), fg='indianred', bg='antiquewhite', highlightthickness=0)
+                  command=lambda aurl=main_url: webbrowser.open(aurl), font=('TkHeadingFont', 15), fg='indianred',
+                  bg='antiquewhite', highlightthickness=0)
     btn3.grid(column=0, row=1)
     item = 1
     for k, v in all_recipes.items():
@@ -101,12 +103,12 @@ def clicked():
         txt2.insert(INSERT, f"В нашей базе нет ни одного рецепта с использованием этих ингредиентов :(")
 
 
-# get_data('https://art-lunch.ru/all-recipes/')
+main_url = "https://art-lunch.ru/all-recipes/"
+# get_data(main_url)
 # строка незакоментирована, когда в первый раз запускаем код, он собирает данные и сохраняет в файл
 # при последующем использовании - строка комментируется, парсинг снова выполнять не нужно
-
-with open("data/projects_data.json", "r", encoding="UTF-8") as file:
-    all_recipes = json.load(file)
+with open("data/projects_data.json", "r", encoding="UTF-8") as f:
+    all_recipes = json.load(f)
 builders = "Грибанова Диана\nПереяславцева Ирина\nСавина Арина\nТокунова Полина"
 
 window = Tk()
@@ -118,11 +120,12 @@ lbl.grid(column=0, row=0)
 txt = Entry(window, width=90)
 txt.grid(column=0, row=1)
 
-btn = Button(window, text='Найти рецепт!', command=clicked, font=('TkHeadingFont', 15), fg='indianred', bg='blanchedalmond')
+btn = Button(window, text='Найти рецепт!', command=clicked, font=('TkHeadingFont', 15), fg='indianred',
+             bg='blanchedalmond')
 btn.grid(column=1, row=1)
 window['bg'] = 'antiquewhite'
 lbl['bg'] = 'antiquewhite'
-btn2 = Button(text=f"Более подробный рецепт можно найти на сайте: Арт-Ланч\n\nРазработчики:\n{builders}", font=('TkHeadingFont', 11), bg='antiquewhite')
+btn2 = Button(text=f"Более подробный рецепт можно найти на сайте: Арт-Ланч\n\nРазработчики:\n{builders}", command=lambda aurl="https://www.tinkoff.ru/cf/5MqY0Xn2q9Q": webbrowser.open(aurl), font=('TkHeadingFont', 11), bg='antiquewhite')
 btn2.grid(row=0, column=1, rowspan=5, columnspan=5)
 
 canvas = tkinter.Canvas(window, height=670, width=860, bg='antiquewhite', highlightthickness=0)
