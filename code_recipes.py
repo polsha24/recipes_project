@@ -128,8 +128,8 @@ lbl['bg'] = 'antiquewhite'
 btn2 = Button(text=f"Более подробный рецепт можно найти на сайте: Арт-Ланч\n\nРазработчики:\n{builders}", command=lambda aurl="https://www.tinkoff.ru/cf/5MqY0Xn2q9Q": webbrowser.open(aurl), font=('TkHeadingFont', 11), bg='antiquewhite')
 btn2.grid(row=0, column=1, rowspan=5, columnspan=5)
 
-canvas = tkinter.Canvas(window, height=670, width=860, bg='antiquewhite', highlightthickness=0)
-img = tkinter.PhotoImage(file="culinary.png")
+canvas = Canvas(window, height=670, width=860, bg='antiquewhite', highlightthickness=0)
+img = PhotoImage(file="culinary.png")
 image = canvas.create_image(90, 50, anchor='nw', image=img)
 canvas.grid(row=2, column=0)
 
