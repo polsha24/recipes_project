@@ -6,10 +6,8 @@ import time
 from unittest import expectedFailure
 
 import requests
-import tkinter
-from tkinter import *
-from tkinter import scrolledtext
 from bs4 import BeautifulSoup
+from pathlib import Path
 
 def get_title(recipe_data):
     try:
@@ -67,10 +65,12 @@ def get_data(url):
 
         folder_name = f"data/data_{item}"
 
-        if os.path.exists(folder_name):
+        if Path(folder_name).exists():
+            shutil.rmtree(Path(folder_name).parent)
+            Path(folder_name).mkdir(parents=True)
             print("[INFO] Folder exists!")
         else:
-            os.mkdir(folder_name)
+            Path(folder_name).mkdir(parents=True)
 
         with open(f"{folder_name}/recipes_{item}.html", "w", encoding="UTF-8") as file:
             file.write(req.text)
@@ -123,56 +123,4 @@ def get_data(url):
         writer = csv.writer(file)
         writer.writerows(recipe_data_dict)
 
-
-def clicked():
-    user_input = set(txt.get().split(", "))
-    window2 = Tk()
-    window2.title("РЕЦЕПТ(Ы)")
-    window2.geometry('900x800')
-    window2['bg'] = 'antiquewhite'
-    txt2 = scrolledtext.ScrolledText(window2, width=90, height=40)
-    txt2.grid(column=0, row=2)
-    btn3 = Button(window2, text=f'У вас есть {", ".join(user_input)}\nВы можете приготовить:',
-                  font=('TkHeadingFont', 15), fg='indianred', bg='antiquewhite', highlightthickness=0)
-    btn3.grid(column=0, row=1)
-    item = 1
-    for k, v in all_recipes.items():
-        if user_input <= set(v):
-            txt2.insert(INSERT, f"#{item}: {k}\n")
-            txt2.insert(INSERT, f"Дополнительно понадобятся: \n{', '.join(set(v).difference(user_input))}\n\n")
-            item += 1
-    if item == 1:
-        txt2.insert(INSERT, f"В нашей базе нет ни одного рецепта с использованием этих ингредиентов :(")
-
-
 get_data('https://art-lunch.ru/all-recipes/')
-# строка незакоментирована, когда в первый раз запускаем код, он собирает данные и сохраняет в файл
-# при последующем использовании - строка комментируется, парсинг снова выполнять не нужно
-
-# with open("data/recipes_data.json", "r", encoding="UTF-8") as file:
-#     all_recipes = json.load(file)
-# builders = "Грибанова Диана\nПереяславцева Ирина\nСавина Арина\nТокунова Полина"
-#
-# window = Tk()
-# window.title("КНИГА РЕЦЕПТОВ")
-# window.geometry('1350x1000')
-#
-# lbl = Label(window, text="Введите ингредиенты: ", font=('TkHeadingFont', 18), fg='indianred')
-# lbl.grid(column=0, row=0)
-# txt = Entry(window, width=90)
-# txt.grid(column=0, row=1)
-#
-# btn = Button(window, text='Найти рецепт!', command=clicked, font=('TkHeadingFont', 15), fg='indianred', bg='blanchedalmond')
-# btn.grid(column=1, row=1)
-# window['bg'] = 'antiquewhite'
-# lbl['bg'] = 'antiquewhite'
-# btn2 = Button(text=f"Более подробный рецепт можно найти на сайте: Арт-Ланч\n\nРазработчики:\n{builders}", font=('TkHeadingFont', 11), bg='antiquewhite')
-# btn2.grid(row=0, column=1, rowspan=5, columnspan=5)
-#
-# canvas = tkinter.Canvas(window, height=670, width=860, bg='antiquewhite', highlightthickness=0)
-# # img = tkinter.PhotoImage(file="culinary.png")
-# # image = canvas.create_image(90, 50, anchor='nw', image=img)
-# canvas.grid(row=2, column=0)
-#
-# txt.focus()
-# window.mainloop()
